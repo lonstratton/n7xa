@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Image / design source files (do not belong in repo)
+*.afphoto
+*.psd
+*.ai
+
+# Optional: thumbnails or temp exports
+*_working.*
+*_temp.*
