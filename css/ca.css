@@ -307,6 +307,10 @@ body {
   width: 100%;
 }
 
+.page-404 .grid.col-full {
+  text-align: center;
+}
+
 .container {
   width: 90%;
   margin: 5em auto;
