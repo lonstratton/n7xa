@@ -568,6 +568,14 @@ footer li {
   font-size: 1em;
 }
 
+footer a img {
+  opacity: 0.6;
+}
+
+footer a img:hover {
+  opacity: 1;
+}
+
 footer li:last-child {
   margin-right: 0;
   padding-right: 0;
