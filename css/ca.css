@@ -1,14 +1,14 @@
 @font-face {
   font-display: swap;
-  font-family: 'Open Sans';
-  src: url('../fonts/OpenSans-Regular.woff2') format('woff2');
+  font-family: "Open Sans";
+  src: url("../fonts/OpenSans-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Open Sans';
-  src: url('../fonts/OpenSans-Bold.woff2') format('woff2');
+  font-family: "Open Sans";
+  src: url("../fonts/OpenSans-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -16,16 +16,25 @@
 
 @font-face {
   font-display: swap;
-  font-family: 'Roboto';
-  src: url('../fonts/roboto-regular.woff2') format('woff2'),
-    url('../fonts/roboto-regular.woff') format('woff');
+  font-family: "Roboto";
+  src: url("../fonts/roboto-extralight.woff2") format("woff2"),
+    url("../fonts/roboto-extralight.woff") format("woff");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Roboto";
+  src: url("../fonts/roboto-regular.woff2") format("woff2"),
+    url("../fonts/roboto-regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Roboto';
-  src: url('../fonts/roboto-bold.woff2') format('woff2');
+  font-family: "Roboto";
+  src: url("../fonts/roboto-bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -33,15 +42,16 @@
 
 /* Root Variables */
 :root {
-  --font-family: "Open Sans", "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  --font-family: "Open Sans", "Roboto", "Helvetica Neue", "Helvetica", "Arial",
+    sans-serif;
   --font-color: #929292;
   --font-size: 13px;
   --line-height: 1.6;
   --background-color: #000000;
   --link-color: #929292;
-  --border-color: #DDD;
+  --border-color: #ddd;
   --transition-time: 0.2s;
-  --selection-background: #0078CF;
+  --selection-background: #0078cf;
   --selection-color: #fff;
   --button-background: #efefef;
   --button-border: #ddd;
@@ -59,7 +69,7 @@ html {
 }
 
 :focus-visible {
-  outline: 2px solid #0078CF;
+  outline: 2px solid #0078cf;
 }
 
 body {
@@ -112,7 +122,7 @@ hr {
   height: 1px;
   border: 0;
   border-top: 1px solid #555;
-  margin: .6em 0;
+  margin: 0.6em 0;
   padding: 0;
 }
 
@@ -139,7 +149,7 @@ blockquote small {
 }
 
 blockquote small:before {
-  content: '\2014 \00A0';
+  content: "\2014 \00A0";
 }
 
 b,
@@ -451,7 +461,8 @@ figure {
   margin-bottom: 2em;
 }
 
-figure figcaption {}
+figure figcaption {
+}
 
 img {
   max-width: 100%;
@@ -473,7 +484,7 @@ a img:hover {
 
 /* -- HEADER
 ------------------------------------------------------------- */
-header#navtop {
+.site-header {
   clear: both;
   overflow: hidden;
 }
@@ -492,7 +503,7 @@ menu a {
 }
 
 .navactive {
-  color: #0078CF;
+  color: #0078cf;
 }
 
 .logo {
@@ -529,7 +540,7 @@ header .arrow {
 }
 
 .arrow:hover {
-  color: #0078CF;
+  color: #0078cf;
 }
 
 /* -- FOOTER
@@ -537,6 +548,7 @@ header .arrow {
 footer {
   color: #929292;
   margin-bottom: 7em;
+  font-family: "Roboto", sans-serif;
 }
 
 footer nav ul {
@@ -560,6 +572,22 @@ footer li:last-child {
   margin-right: 0;
   padding-right: 0;
   border-right: none;
+}
+
+.footer-title {
+  font-size: 1em;
+  position: relative;
+  top: 0.07em;
+}
+
+.footer-title .title-light {
+  font-weight: 200;
+  letter-spacing: -0.06em;
+}
+
+.footer-title .title-bold {
+  font-weight: 700;
+  letter-spacing: -0.06em;
 }
 
 #iframe-container {
@@ -642,8 +670,8 @@ footer li:last-child {
 
 /* -- WORKS / Home-page and Works-page
 ------------------------------------------------------------- */
-.works-page figure>a,
-.works figure>a {
+.works-page figure > a,
+.works figure > a {
   display: block;
   height: 100%;
   width: 100%;
@@ -651,7 +679,7 @@ footer li:last-child {
   position: relative;
 }
 
-.works figure>a {
+.works figure > a {
   padding-top: 1em;
 }
 
@@ -705,7 +733,6 @@ footer li:last-child {
 /* -- Media query 1 (mq1)
 ------------------------------------------------------------- */
 @media only screen and (max-width: 60em) {
-
   /* 13 / 780 */
   .mq1-col-full {
     width: 100%;
@@ -740,7 +767,6 @@ footer li:last-child {
 /* -- Media query 2 (mq2)
 ------------------------------------------------------------- */
 @media only screen and (max-width: 48em) {
-
   /* 13 / 624 */
   .mq2-col-full {
     width: 100%;
@@ -814,14 +840,13 @@ footer li:last-child {
   }
 
   .mobile {
-    letter-spacing: .03em;
+    letter-spacing: 0.03em;
   }
 }
 
 /* -- Media query 3 (mq3)
 ------------------------------------------------------------- */
 @media only screen and (max-width: 30em) {
-
   /* 13 / 390 */
   .mq3-col-full {
     width: 100%;
@@ -873,14 +898,6 @@ footer li:last-child {
     width: 100%;
     height: 100%;
     border: 0;
-  }
-
-  .services article {
-    margin-top: 3em;
-  }
-
-  .services article:first-of-type {
-    margin-top: 0;
   }
 }
 
