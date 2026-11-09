@@ -324,7 +324,7 @@ body {
 .container {
   width: 90%;
   margin: 5em auto;
-  max-width: 1100px;
+  max-width: 1200px;
   min-width: 300px;
 }
 
@@ -669,6 +669,30 @@ footer li:last-child {
   cursor: pointer;
 }
 
+/* -- Image Modal Close Button
+------------------------------------------------------------- */
+
+#imageModal .close {
+  z-index: 4;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  padding: 5px;
+  appearance: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+#imageModal .close:hover {
+  background: transparent;
+  opacity: 0.6;
+}
+
 .modal-text {
   margin-top: 10px;
   color: #fff;
@@ -676,12 +700,72 @@ footer li:last-child {
   font-size: 16px;
 }
 
+
+/* -- Modal Gallery Navigation
+------------------------------------------------------------- */
+
+.modal-prev,
+.modal-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  border: 0;
+  background: none;
+  color: #aaa;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 15px;
+  transition: color 0.2s ease;
+}
+
+.modal-prev {
+  left: 20px;
+}
+
+.modal-next {
+  right: 20px;
+}
+
+.modal-prev:hover,
+.modal-next:hover {
+  color: #fff;
+}
+
+#imageModal .modal-text {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+#imageModal {
+  z-index: 10;
+  touch-action: pan-y;
+}
+
+@media only screen and (max-width: 48em) {
+  .modal-prev {
+    left: 5px;
+  }
+
+  .modal-next {
+    right: 5px;
+  }
+
+  .modal-prev,
+  .modal-next {
+    font-size: 25px;
+    padding: 10px;
+  }
+}
+
 /* -- WORKS / Home-page and Works-page
 ------------------------------------------------------------- */
 .works-page figure > a,
 .works figure > a {
   display: block;
-  height: 100%;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -734,39 +818,74 @@ footer li:last-child {
   margin-bottom: 2em;
 }
 
+/* -- FLEX GALLERY
+------------------------------------------------------------- */
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 0;
+}
+
+.gallery-feature {
+  flex: 0 0 100%;
+}
+
+.gallery-item {
+  flex: 0 0 calc((100% - 3em) / 4);
+  min-width: 0;
+}
+
+.gallery-subheading {
+  flex: 0 0 100%;
+  width: auto;
+  margin: 2em 0 1.5em;
+  color: #909090;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.gallery-subheading::after {
+  content: "";
+  display: block;
+  width: 30%;
+  border-bottom: 1px solid #555;
+  margin-top: 0.4em;
+}
+
+/* -- Detail Page Gallery
+------------------------------------------------------------- */
+
+
+/* -- Detail Page Gallery
+------------------------------------------------------------- */
+
+.gallery-detail .gallery-item {
+  flex-basis: calc((100% - 2em) / 3);
+}
+
+.gallery-detail .gallery-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: center;
+}
+
+
 /* -------------------------------------------------------------
-======	MEDIA QUERIES
+====== MEDIA QUERIES
 ------------------------------------------------------------- */
 
 /* -- Media query 1 (mq1)
 ------------------------------------------------------------- */
-@media only screen and (max-width: 60em) {
-  /* 13 / 780 */
-  .mq1-col-full {
-    width: 100%;
+@media only screen and (max-width: 62.5em) {
+  .gallery-item {
+    flex-basis: calc((100% - 2em) / 3);
   }
 
-  .mq1-col-one-half {
-    width: 50%;
-  }
-
-  .mq1-col-one-third {
-    width: 33.333%;
-  }
-
-  .mq1-col-two-thirds {
-    width: 66.666%;
-  }
-
-  .mq1-col-one-quarter {
-    width: 25%;
-  }
-
-  .mq1-col-three-quarters {
-    width: 75%;
-  }
-
-  /**/
   h1 {
     font-size: 3.1em;
   }
@@ -775,32 +894,10 @@ footer li:last-child {
 /* -- Media query 2 (mq2)
 ------------------------------------------------------------- */
 @media only screen and (max-width: 48em) {
-  /* 13 / 624 */
-  .mq2-col-full {
-    width: 100%;
+  .gallery-item {
+    flex-basis: calc((100% - 1em) / 2);
   }
 
-  .mq2-col-one-half {
-    width: 50%;
-  }
-
-  .mq2-col-one-third {
-    width: 33.333%;
-  }
-
-  .mq2-col-two-thirds {
-    width: 66.666%;
-  }
-
-  .mq2-col-one-quarter {
-    width: 25%;
-  }
-
-  .mq2-col-three-quarters {
-    width: 75%;
-  }
-
-  /**/
   header nav {
     width: 100%;
   }
@@ -855,36 +952,14 @@ footer li:last-child {
 /* -- Media query 3 (mq3)
 ------------------------------------------------------------- */
 @media only screen and (max-width: 30em) {
-  /* 13 / 390 */
-  .mq3-col-full {
-    width: 100%;
+  .gallery-item {
+    flex-basis: 100%;
+  }
+  
+  .gallery-detail .gallery-item {
+    flex-basis: 100%;
   }
 
-  .mq3-col-one-half {
-    width: 50%;
-  }
-
-  .mq3-col-one-third {
-    width: 33.333%;
-  }
-
-  .mq3-col-two-thirds {
-    width: 66.666%;
-  }
-
-  .mq3-col-one-quarter {
-    width: 25%;
-  }
-
-  .mq3-col-three-quarters {
-    width: 75%;
-  }
-
-  .mq3-none {
-    display: none;
-  }
-
-  /**/
   header nav ul li {
     padding: 0 0.5em;
     float: right;
@@ -894,7 +969,6 @@ footer li:last-child {
     position: relative;
     width: 100%;
     padding-bottom: 54.54%;
-    /* Aspect ratio 600/1100 */
     height: 0;
     overflow: hidden;
   }
