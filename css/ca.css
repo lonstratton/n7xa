@@ -855,9 +855,10 @@ footer li:last-child {
   margin-top: 0.4em;
 }
 
-/* -- Detail Page Gallery
-------------------------------------------------------------- */
-
+.gallery-description {
+  flex: 0 0 100%;
+  margin: 0 0 2em 1em;
+}
 
 /* -- Detail Page Gallery
 ------------------------------------------------------------- */
@@ -869,6 +870,7 @@ footer li:last-child {
 .gallery-detail .gallery-item img {
   display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 3 / 2;
   object-fit: cover;
   object-position: center;
@@ -879,7 +881,7 @@ footer li:last-child {
 ====== MEDIA QUERIES
 ------------------------------------------------------------- */
 
-/* -- Media query 1 (mq1)
+/* -- Media query 1 (mq1) 1000px
 ------------------------------------------------------------- */
 @media only screen and (max-width: 62.5em) {
   .gallery-item {
@@ -891,7 +893,7 @@ footer li:last-child {
   }
 }
 
-/* -- Media query 2 (mq2)
+/* -- Media query 2 (mq2) 768px
 ------------------------------------------------------------- */
 @media only screen and (max-width: 48em) {
   .gallery-item {
@@ -911,6 +913,10 @@ footer li:last-child {
   header nav ul li {
     float: right;
     padding: 0 1em;
+  }
+  
+  .gallery-detail .gallery-item {
+  flex-basis: calc((100% - 1em) / 2);
   }
 
   footer {
@@ -949,7 +955,7 @@ footer li:last-child {
   }
 }
 
-/* -- Media query 3 (mq3)
+/* -- Media query 3 (mq3) 480px
 ------------------------------------------------------------- */
 @media only screen and (max-width: 30em) {
   .gallery-item {
