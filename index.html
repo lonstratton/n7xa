@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="top">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,15 +16,34 @@
 <body>
 <div class="container">
 	<header class="site-header">
-		<div class="logo fleft">
-			<h1>
-				N7XA <img src="img/mailsig.png" alt="N7XA" class="h1-image"> 
-			</h1>
-			<p style="font-size: 1.1em; margin-left: 0.3em;">
-				Piper Turbo Saratoga SP 
-			</p>
+	<div class="logo fleft">
+		<h1><span class="h1-reverse-italic">N7XA</span>
+			<img src="img/mailsig.png" alt="" class="h1-image">
+		</h1>
+		<p class="sub-h1">Piper Turbo Saratoga SP</p>
+	</div>
+	<nav class="gallery-nav" aria-label="Photo gallery sections">
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#aerials">Aerials</a> 
 		</div>
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#exterior">Exterior</a> 
+		</div>
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#interior">Interior</a> 
+		</div>
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#instrument-panel">Panel</a> 
+		</div>
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#engine">Engine</a> 
+		</div>
+		<div class="gallery-nav-item">
+			<a class="gallery-nav-heading" href="#video">Video</a> 
+		</div>
+	</nav>
 	</header>
+	
 	<div class="works-page divide-top">
 		<div class="gallery">
 			<figure class="gallery-feature">
@@ -34,7 +53,7 @@
 				</figcaption>
 			</figure>
 			
-			<p class="gallery-subheading">Aerials</p>
+			<p class="gallery-subheading" id="aerials">Aerials</p>
 			<figure class="gallery-item">
 				<a onclick="openModal('img/aerial/over_LM.jpg')"> <img src="img/aerial/overlm.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
 				<figcaption>
@@ -84,7 +103,11 @@
 				</figcaption>
 			</figure>
 			
-			<p class="gallery-subheading">Exterior</p>
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
+			
+			<p class="gallery-subheading" id="exterior">Exterior</p>
 			<figure class="gallery-item">
 				<a onclick="openModal('img/exterior/ext4.jpg')"> <img src="img/exterior/tn_ext4.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
 			</figure>
@@ -117,7 +140,11 @@
 				<a onclick="openModal('img/exterior/ext8.jpg')"> <img src="img/exterior/tn_ext8.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
 			</figure>
 			
-			<p class="gallery-subheading">Interior</p>
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
+			
+			<p class="gallery-subheading" id="interior">Interior</p>
 			<figure class="gallery-item">
 				<a onclick="openModal('img/interior/interior.jpg')"> <img src="img/interior/tn_interior.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
 				<figcaption>
@@ -215,7 +242,11 @@
 				</figcaption>
 			</figure>
 			
-			<p class="gallery-subheading">Instrument Panel</p>
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
+			
+			<p class="gallery-subheading" id="instrument-panel">Instrument Panel</p>
 			<figure class="gallery-item">
 				<a onclick="openModal('img/panel/8pack.jpg')"> <img src="img/panel/tn_8pack.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
 				<figcaption>
@@ -252,9 +283,115 @@
 					Panel Wide 
 				</figcaption>
 			</figure>
+			
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
+			
+			<p class="gallery-subheading" id="engine">Firewall Forward 2023</p>
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/removed.jpg')"> <img src="img/engine/tn_removed.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Engine Removed 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/firewall-prep.jpg')"> <img src="img/engine/tn_firewall-prep.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Preparing the Firewall 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/firewall-finished.jpg')"> <img src="img/engine/tn_firewall-finished.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Firewall Complete 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/top-cowling.jpg')"> <img src="img/engine/tn_top-cowling.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Preparing Top Cowling 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/top-cowling-complete.jpg')"> <img src="img/engine/tn_top-cowling-complete.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Top Cowling Complete 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/new-standby.jpg')"> <img src="img/engine/tn_new-standby.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					New Engine Ready to install 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/new-installed.jpg')"> <img src="img/engine/tn_new-installed.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					New Engine Installed 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/top-view.jpg')"> <img src="img/engine/tn_top-view.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Top View 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/wire-detail.jpg')"> <img src="img/engine/tn_wire-detail.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Wire Harness Detail 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/install-left.jpg')"> <img src="img/engine/tn_install-left.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Left Side 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/install-right.jpg')"> <img src="img/engine/tn_install-right.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Right Side 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/nosegear.jpg')"> <img src="img/engine/tn_nosegear.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Nose Gear Installed 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/nosegear-detail.jpg')"> <img src="img/engine/tn_nosegear-detail.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Nose Gear Detaill 
+				</figcaption>
+			</figure>
+			
+			<figure class="gallery-item">
+				<a onclick="openModal('img/engine/prop.jpg')"> <img src="img/engine/tn_prop.jpg" alt="" style="width: 100%;"> <span class="zoom"> </span> </a> 
+				<figcaption>
+					Prop Installed 
+				</figcaption>
+			</figure>
+			
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
 
-
-			<p class="gallery-subheading">Video</p>
+			<p class="gallery-subheading" id="video">Video</p>
 			<figure class="gallery-item">
 				<a onclick="openiframeModal('https://player.vimeo.com/video/907225310?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=5847')"> <img src="img/aerial.jpg" alt="" style="width: 100%;"> <span class="play"> </span> </a> 
 				<figcaption>
@@ -262,6 +399,9 @@
 				</figcaption>
 			</figure>
 			
+			<div class="top-of-page">
+				<a href="#top" class="top-button" aria-label="Back to top"></a>
+			</div>
 		</div>
 	</div>
 	<div class="divide-top">
