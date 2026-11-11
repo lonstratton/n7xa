@@ -15,6 +15,55 @@ let modalIndex = 0;
 let touchStartX = 0;
 let touchStartY = 0;
 
+let zoomScale = 1;
+let zoomX = 0;
+let zoomY = 0;
+let dragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let pinchStartDistance = 0;
+let pinchStartScale = 1;
+let suppressZoomClick = false;
+let pinching = false;
+let mouseStartX = 0;
+let mouseStartY = 0;
+
+const modalImage = document.getElementById('modalImage');
+const imageModal = document.getElementById('imageModal');
+
+function updateZoom() {
+  modalImage.style.transform =
+    `translate(-50%, -50%) translate(${zoomX}px, ${zoomY}px) scale(${zoomScale})`;
+
+  modalImage.classList.toggle('is-zoomed', zoomScale > 1);
+}
+
+function resetZoom() {
+  zoomScale = 1;
+  zoomX = 0;
+  zoomY = 0;
+  dragging = false;
+  modalImage.classList.remove('is-dragging');
+  updateZoom();
+  suppressZoomClick = false;
+}
+
+function toggleZoom() {
+  if (zoomScale > 1) {
+    resetZoom();
+  } else {
+    zoomScale = 2;
+    updateZoom();
+  }
+}
+
+function touchDistance(touches) {
+  return Math.hypot(
+    touches[0].clientX - touches[1].clientX,
+    touches[0].clientY - touches[1].clientY
+  );
+}
+
 function openModal(imageSrc) {
   saveScrollPosition();
 
@@ -70,6 +119,8 @@ function openModal(imageSrc) {
 }
 
 function showModalImage() {
+  resetZoom();
+  
   const image = modalImages[modalIndex];
 
   document.getElementById('modalImage').src = image.src;
@@ -108,34 +159,126 @@ function modalKeydown(event) {
 }
 
 function closeModal() {
+  resetZoom();
+  
   document.getElementById('imageModal').style.display = 'none';
   document.body.style.overflow = '';
   document.removeEventListener('keydown', modalKeydown);
 }
 
-// Close when clicking the image or modal background.
-document.getElementById('imageModal').addEventListener('click', function(event) {
-  if (event.target === this || event.target.id === 'modalImage') {
-    closeModal();
-  }
-});
-
-// Swipe navigation.
-const imageModal = document.getElementById('imageModal');
+// Swipe navigation, touch panning and pinch zoom.
+let touchMoved = false;
 
 imageModal.addEventListener('touchstart', function(event) {
-  touchStartX = event.changedTouches[0].screenX;
-  touchStartY = event.changedTouches[0].screenY;
-}, { passive: true });
+  touchMoved = false;
 
-imageModal.addEventListener('touchend', function(event) {
-  const deltaX = event.changedTouches[0].screenX - touchStartX;
-  const deltaY = event.changedTouches[0].screenY - touchStartY;
+  if (event.touches.length === 2) {
+    pinching = true;
+	pinchStartDistance = touchDistance(event.touches);
+	pinchStartScale = zoomScale;
+	touchMoved = true;
+  } else if (event.touches.length === 1) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
 
-  if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
-    changeModalImage(deltaX < 0 ? 1 : -1);
+    dragStartX = touchStartX - zoomX;
+    dragStartY = touchStartY - zoomY;
   }
 }, { passive: true });
+
+imageModal.addEventListener('touchmove', function(event) {
+  if (event.touches.length === 2) {
+    event.preventDefault();
+
+    zoomScale = Math.max(1, Math.min(4,
+      pinchStartScale *
+      touchDistance(event.touches) / pinchStartDistance
+    ));
+
+    if (zoomScale === 1) {
+      zoomX = 0;
+      zoomY = 0;
+    }
+
+    touchMoved = true;
+    updateZoom();
+
+  } else if (event.touches.length === 1 && zoomScale > 1) {
+    event.preventDefault();
+
+    zoomX = event.touches[0].clientX - dragStartX;
+    zoomY = event.touches[0].clientY - dragStartY;
+
+    touchMoved = true;
+    updateZoom();
+  }
+}, { passive: false });
+
+imageModal.addEventListener('touchend', function(event) {
+  if (event.touches.length > 0) return;
+
+  const deltaX = event.changedTouches[0].clientX - touchStartX;
+  const deltaY = event.changedTouches[0].clientY - touchStartY;
+
+  if (!pinching && zoomScale === 1 &&
+      Math.abs(deltaX) > 50 &&
+      Math.abs(deltaX) > Math.abs(deltaY)) {
+    changeModalImage(deltaX < 0 ? 1 : -1);
+  }
+
+  pinching = false;
+}, { passive: true });
+
+// Click image to zoom; click background to close.
+imageModal.addEventListener('click', function(event) {
+  if (event.target === this) {
+    closeModal();
+  } else if (event.target === modalImage) {
+  if (suppressZoomClick) {
+    suppressZoomClick = false;
+    return;
+  }
+  toggleZoom();
+}
+});
+
+modalImage.addEventListener('mousedown', function(event) {
+  if (zoomScale <= 1) return;
+
+  event.preventDefault();
+  dragging = true;
+
+  mouseStartX = event.clientX;
+  mouseStartY = event.clientY;
+
+  dragStartX = event.clientX - zoomX;
+  dragStartY = event.clientY - zoomY;
+
+  modalImage.classList.add('is-dragging');
+});
+
+window.addEventListener('mousemove', function(event) {
+  if (!dragging) return;
+
+  if (Math.abs(event.clientX - mouseStartX) > 3 ||
+      Math.abs(event.clientY - mouseStartY) > 3) {
+    suppressZoomClick = true;
+  }
+
+  zoomX = event.clientX - dragStartX;
+  zoomY = event.clientY - dragStartY;
+
+  updateZoom();
+});
+
+window.addEventListener('mouseup', function() {
+  dragging = false;
+  modalImage.classList.remove('is-dragging');
+});
+
+modalImage.addEventListener('dragstart', function(event) {
+  event.preventDefault();
+});
 
 // The Modal for Iframe
 function openiframeModal(iframeSrc) {

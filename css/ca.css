@@ -768,6 +768,29 @@ footer li:last-child {
   touch-action: pan-y;
 }
 
+/* -- Image Modal Zoom
+------------------------------------------------------------- */
+
+#modalImage {
+  cursor: zoom-in;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center center;
+}
+
+#modalImage.is-zoomed {
+  cursor: zoom-out;
+}
+
+#modalImage.is-dragging {
+  cursor: grabbing;
+}
+
+#imageModal {
+  overflow: hidden;
+}
+
 @media only screen and (max-width: 48em) {
   .modal-prev {
     left: 5px;
