@@ -1089,6 +1089,20 @@ footer li:last-child {
   }
 }
 
+/* -- SWIPE 
+------------------------------------------------------------- */
+#imageModal {
+  touch-action: none;
+}
+
+#modalSwipeImage {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  transform-origin: center center;
+}
+
 /* -------------------------------------------------------------
 ======	END
 ------------------------------------------------------------- */

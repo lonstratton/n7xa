@@ -119,6 +119,9 @@ function openModal(imageSrc) {
 }
 
 function showModalImage() {
+  cancelSwipe();
+  gesture = null;
+  pinching = false;
   resetZoom();
   
   const image = modalImages[modalIndex];
@@ -126,6 +129,15 @@ function showModalImage() {
   document.getElementById('modalImage').src = image.src;
   document.getElementById('modalImage').alt = image.caption;
   document.getElementById('modalCaption').textContent = image.caption;
+
+  // Warm the two adjacent images without changing section boundaries.
+  adjacentPreloads = modalImages.length > 1 ? [-1, 1].map(direction => {
+    const preload = new Image();
+    preload.src = modalImages[
+      (modalIndex + direction + modalImages.length) % modalImages.length
+    ].src;
+    return preload;
+  }) : [];
 
   const showArrows = modalImages.length > 1;
 
@@ -159,6 +171,8 @@ function modalKeydown(event) {
 }
 
 function closeModal() {
+  cancelSwipe();
+  gesture = null;
   resetZoom();
   
   document.getElementById('imageModal').style.display = 'none';
@@ -166,68 +180,179 @@ function closeModal() {
   document.removeEventListener('keydown', modalKeydown);
 }
 
-// Swipe navigation, touch panning and pinch zoom.
-let touchMoved = false;
+// Touch-following navigation. The preview never receives clicks or focus.
+const swipeImage = document.getElementById('modalSwipeImage');
+let gesture = null;
+let swipeX = 0;
+let swipeDirection = 0;
+let swipeWidth = 0;
+let settling = false;
+let settleTimer = null;
+let ignoreTouchClickUntil = 0;
+let adjacentPreloads = [];
+swipeImage.addEventListener('load', function() {
+  if (swipeDirection) swipeImage.style.visibility = 'visible';
+});
+swipeImage.addEventListener('error', function() {
+  swipeImage.style.visibility = 'hidden';
+});
+
+function blockTouchClick() {
+  ignoreTouchClickUntil = Date.now() + 700;
+}
+
+function cancelSwipe() {
+  clearTimeout(settleTimer);
+  settleTimer = null;
+  settling = false;
+  swipeX = 0;
+  swipeDirection = 0;
+  modalImage.style.transition = 'none';
+  swipeImage.style.transition = 'none';
+  swipeImage.style.visibility = 'hidden';
+  updateZoom();
+}
+
+function drawSwipe(x) {
+  swipeX = Math.max(-swipeWidth, Math.min(swipeWidth, x));
+  const direction = swipeX < 0 ? 1 : -1;
+  if (direction !== swipeDirection) {
+    swipeDirection = direction;
+    const next = (modalIndex + direction + modalImages.length) % modalImages.length;
+    swipeImage.src = modalImages[next].src;
+  }
+  swipeImage.style.visibility = swipeImage.complete && swipeImage.naturalWidth > 0
+    ? 'visible' : 'hidden';
+  modalImage.style.transform = `translate(-50%, -50%) translateX(${swipeX}px)`;
+  swipeImage.style.transform =
+    `translate(-50%, -50%) translateX(${swipeX + swipeDirection * swipeWidth}px)`;
+}
+
+function finishSwipe(commit) {
+  if (!swipeDirection) return;
+  const direction = swipeDirection;
+  // Never replace the current photo with a preview that failed or is still loading.
+  commit = commit && swipeImage.complete && swipeImage.naturalWidth > 0;
+  settling = true;
+  const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 250;
+  const transition = `transform ${duration}ms cubic-bezier(.22,.61,.36,1)`;
+  modalImage.style.transition = transition;
+  swipeImage.style.transition = transition;
+  // Flush the finger-following position before setting the animation destination.
+  void modalImage.offsetWidth;
+  const destination = commit ? -direction * swipeWidth : 0;
+  modalImage.style.transform = `translate(-50%, -50%) translateX(${destination}px)`;
+  swipeImage.style.transform =
+    `translate(-50%, -50%) translateX(${destination + direction * swipeWidth}px)`;
+  settleTimer = setTimeout(() => {
+    cancelSwipe();
+    if (commit) changeModalImage(direction);
+  }, duration);
+}
 
 imageModal.addEventListener('touchstart', function(event) {
-  touchMoved = false;
-
-  if (event.touches.length === 2) {
+  if (event.target.closest('button')) return;
+  if (settling) {
+    blockTouchClick();
+    return;
+  }
+  if (event.touches.length >= 2) {
+    cancelSwipe();
+    blockTouchClick();
     pinching = true;
-	pinchStartDistance = touchDistance(event.touches);
-	pinchStartScale = zoomScale;
-	touchMoved = true;
+    gesture = { mode: 'pinch' };
+    pinchStartDistance = touchDistance(event.touches);
+    pinchStartScale = zoomScale;
   } else if (event.touches.length === 1) {
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
-
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
     dragStartX = touchStartX - zoomX;
     dragStartY = touchStartY - zoomY;
+    swipeWidth = imageModal.clientWidth;
+    gesture = { mode: zoomScale > 1 ? 'pan' : 'pending', id: touch.identifier };
   }
 }, { passive: true });
 
 imageModal.addEventListener('touchmove', function(event) {
-  if (event.touches.length === 2) {
+  if (!gesture || settling) return;
+  if (event.touches.length >= 2 && gesture.mode === 'pinch') {
     event.preventDefault();
-
-    zoomScale = Math.max(1, Math.min(4,
-      pinchStartScale *
-      touchDistance(event.touches) / pinchStartDistance
-    ));
-
-    if (zoomScale === 1) {
-      zoomX = 0;
-      zoomY = 0;
+    if (pinchStartDistance > 0) {
+      zoomScale = Math.max(1, Math.min(4,
+        pinchStartScale * touchDistance(event.touches) / pinchStartDistance));
     }
-
-    touchMoved = true;
+    if (zoomScale === 1) zoomX = zoomY = 0;
     updateZoom();
-
-  } else if (event.touches.length === 1 && zoomScale > 1) {
+    blockTouchClick();
+    return;
+  }
+  const touch = Array.from(event.touches).find(t => t.identifier === gesture.id);
+  if (!touch) return;
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+  if (Math.hypot(dx, dy) > 6) blockTouchClick();
+  if (gesture.mode === 'pan') {
     event.preventDefault();
-
-    zoomX = event.touches[0].clientX - dragStartX;
-    zoomY = event.touches[0].clientY - dragStartY;
-
-    touchMoved = true;
+    zoomX = touch.clientX - dragStartX;
+    zoomY = touch.clientY - dragStartY;
     updateZoom();
+  } else {
+    if (gesture.mode === 'pending' && Math.max(Math.abs(dx), Math.abs(dy)) > 8) {
+      gesture.mode = Math.abs(dx) > Math.abs(dy) && modalImages.length > 1
+        ? 'swipe' : 'vertical';
+    }
+    if (gesture.mode === 'swipe') {
+      event.preventDefault();
+      drawSwipe(dx);
+    }
   }
 }, { passive: false });
 
 imageModal.addEventListener('touchend', function(event) {
-  if (event.touches.length > 0) return;
-
-  const deltaX = event.changedTouches[0].clientX - touchStartX;
-  const deltaY = event.changedTouches[0].clientY - touchStartY;
-
-  if (!pinching && zoomScale === 1 &&
-      Math.abs(deltaX) > 50 &&
-      Math.abs(deltaX) > Math.abs(deltaY)) {
-    changeModalImage(deltaX < 0 ? 1 : -1);
+  if (!gesture) return;
+  if (event.touches.length > 0) {
+    // Rebase the remaining finger after a pinch; it may pan, never navigate.
+    if (gesture.mode === 'pinch') {
+      const touch = event.touches[0];
+      gesture = { mode: 'pan', id: touch.identifier };
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      dragStartX = touch.clientX - zoomX;
+      dragStartY = touch.clientY - zoomY;
+    }
+    return;
   }
-
+  if (gesture.mode === 'swipe') {
+    blockTouchClick();
+    finishSwipe(Math.abs(swipeX) >= Math.min(100, swipeWidth * .2));
+  }
+  if (pinching) blockTouchClick();
   pinching = false;
+  gesture = null;
 }, { passive: true });
+
+imageModal.addEventListener('touchcancel', function() {
+  blockTouchClick();
+  gesture = null;
+  pinching = false;
+  if (swipeDirection) finishSwipe(false);
+}, { passive: true });
+
+window.addEventListener('resize', function() {
+  if (gesture || settling) blockTouchClick();
+  gesture = null;
+  pinching = false;
+  cancelSwipe();
+});
+
+// Suppress compatibility clicks after a swipe, pan or pinch (including backdrop clicks).
+imageModal.addEventListener('click', function(event) {
+  if (Date.now() < ignoreTouchClickUntil || settling) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+}, true);
 
 // Click image to zoom; click background to close.
 imageModal.addEventListener('click', function(event) {
