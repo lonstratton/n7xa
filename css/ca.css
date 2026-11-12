@@ -550,8 +550,9 @@ menu a {
 }
 
 .arrow:after {
-  content: " \27F6";
-  /* html unicode: &#10230; */
+  content: " \27F6"; /* html unicode: &#10230; */
+  position: relative;
+  top: -0.15em;
 }
 
 header .arrow {
