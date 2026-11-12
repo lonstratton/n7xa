@@ -226,13 +226,11 @@ h6 {
 }
 
 h1 {
-  font-size: 3.5em;
+  font-size: 4em;
   text-transform: uppercase;
   line-height: 0.9;
   margin: 0 0 0.1em;
-  font-weight: 700;
-  transform: skewX(10deg);
-  transform-origin: left center;
+  font-weight: 500;
 }
 
 h1 .h1-image {
@@ -248,13 +246,13 @@ h1 .h1-image {
   text-transform: none;
   margin: -.6em 0 0 0.2em;
   color: #777;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   font-weight: 500;
 }
 
 h2 {
-  font-size: 2.5em;
-  margin: 0 0 20px;
+  font-size: 1.3em;
+  margin: .5em 0 0 .85em;
   letter-spacing: -0.05em;
   color: #555;
   line-height: 1;
@@ -301,7 +299,6 @@ h6 a:hover {
 
 h1 a {
   color: inherit;
-  font-weight: 700;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -1005,6 +1002,10 @@ footer li:last-child {
 
   .gallery-nav-heading {
   font-size: 1em;
+  }
+  
+  .gallery-detail .gallery-item {
+  flex-basis: calc((100% - 1em) / 2);
   }
 
   footer {
